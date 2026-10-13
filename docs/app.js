@@ -216,6 +216,15 @@ function sphere(radius, n = 40) {
 }
 const SPHERE = sphere(1.0);
 
+function sphereTrace(center, radius, color, name) {   // solid sphere as a surface (sizes in scene units)
+  const s = sphere(1.0, 24);
+  const x = s.x.map(r => r.map(v => center[0] + radius * v));
+  const y = s.y.map(r => r.map(v => center[1] + radius * v));
+  const z = s.z.map(r => r.map(v => center[2] + radius * v));
+  return { type: "surface", x, y, z, colorscale: [[0, color], [1, color]], showscale: false,
+           hoverinfo: "name", name, showlegend: true, lighting: { ambient: 0.75 } };
+}
+
 function arrow(tail, head, color, name, width = 5) {
   const d = [head[0] - tail[0], head[1] - tail[1], head[2] - tail[2]];
   return [
@@ -308,11 +317,17 @@ function renderOrbit(tgps) {
       line: { color: "#99a", width: 2 }, name: "Orbit (1 yr)", hoverinfo: "skip" },
     { type: "scatter3d", mode: "lines", x: path.map(q => q[0]), y: path.map(q => q[1]), z: path.map(q => q[2]),
       line: { color: "#1aa34a", width: 4 }, name: "Observed so far", hoverinfo: "skip" },
-    { type: "scatter3d", mode: "markers", x: [0], y: [0], z: [0], marker: { size: 12, color: "#ff9900" }, name: "Sun" },
-    { type: "scatter3d", mode: "markers", x: [posE[0]], y: [posE[1]], z: [posE[2]], marker: { size: 6, color: "#2d7dd2" }, name: "Earth" },
-    ...arrow(scale(n, 2.6), scale(n, 1.6), "#ff4444", "CW propagation (from source)"),
+    sphereTrace([0, 0, 0], 0.18, "#ff9900", "Sun"),
+    sphereTrace(posE, 0.06, "#2d7dd2", "Earth"),
+    ...arrow(scale(n, 1.6), scale(n, 1.15), "#ff4444", "CW propagation (from source)"),
   ];
-  Plotly.react("orbit", traces, sceneLayout("orbit", 2.6, "Orbit view (SSB, AU)"), { displaylogo: false, responsive: true });
+  const layout = sceneLayout("orbit", 1.6, "Orbit view (SSB, AU)");
+  // the orbit is nearly flat, so squash the vertical extent to make the view larger
+  layout.scene.zaxis = { visible: false, range: [-1.2, 1.2] };
+  layout.scene.aspectmode = "manual";
+  layout.scene.aspectratio = { x: 1, y: 1, z: 0.75 };   // 2.4 / 3.2 keeps the scale isotropic
+  layout.scene.camera = { eye: { x: 1.0, y: 1.0, z: 0.6 } };
+  Plotly.react("orbit", traces, layout, { displaylogo: false, responsive: true });
 }
 
 // ---- wiring ---------------------------------------------------------------

@@ -92,7 +92,7 @@ Drag on the spectrogram to zoom, double-click to reset. Drag the Earth view to r
 scroll to zoom.
 
 $f(t) = \left[f_0 + \dot f\,\Delta t + \tfrac12 \ddot f\,\Delta t^2\right]
-\left(1 + \frac{\vec v_\mathrm{det}\cdot\hat n}{c}\right)$
+\left(1 + \frac{\vec v\cdot\hat n}{c}\right)$
 """,
             mathjax=True, style={"fontSize": 11, "color": MUTED, "marginTop": 12},
         ),
@@ -271,6 +271,15 @@ def _sphere(radius, n=40):
     return x, y, z
 
 
+def _solid_sphere(center, radius, color, name):
+    x, y, z = _sphere(radius, n=24)
+    return go.Surface(
+        x=x + center[0], y=y + center[1], z=z + center[2],
+        colorscale=[[0, color], [1, color]], showscale=False, name=name, showlegend=True,
+        hoverinfo="name", lighting={"ambient": 0.75},
+    )
+
+
 def _arrow(tail, head, color, name, width=5):
     d = np.asarray(head) - np.asarray(tail)
     return [
@@ -387,14 +396,16 @@ def orbit_figure(p, t_gps, ring):
                      line={"color": "#99a", "width": 2}, name="Orbit (1 yr)", hoverinfo="skip"),
         go.Scatter3d(x=path[:, 0], y=path[:, 1], z=path[:, 2], mode="lines",
                      line={"color": "#1aa34a", "width": 4}, name="Observed so far", hoverinfo="skip"),
-        go.Scatter3d(x=[0], y=[0], z=[0], mode="markers", marker={"size": 12, "color": "#ff9900"},
-                     name="Sun"),
-        go.Scatter3d(x=[pos_e[0]], y=[pos_e[1]], z=[pos_e[2]], mode="markers",
-                     marker={"size": 6, "color": "#2d7dd2"}, name="Earth"),
+        _solid_sphere([0, 0, 0], 0.18, "#ff9900", "Sun"),
+        _solid_sphere(pos_e, 0.06, "#2d7dd2", "Earth"),
     ]
-    traces += _arrow(2.6 * n, 1.6 * n, "#ff4444", "CW propagation (from source)")
+    traces += _arrow(1.6 * n, 1.15 * n, "#ff4444", "CW propagation (from source)")
     fig = go.Figure(traces)
-    fig.update_layout(**_scene("orbit", 2.6), title={"text": "Orbit view (SSB, AU)", "font": {"size": 13}})
+    layout = _scene("orbit", 1.6)
+    layout["scene"].update(zaxis={"visible": False, "range": [-1.2, 1.2]}, aspectmode="manual",
+                           aspectratio={"x": 1, "y": 1, "z": 0.75},
+                           camera={"eye": {"x": 1.0, "y": 1.0, "z": 0.6}})
+    fig.update_layout(**layout, title={"text": "Orbit view (SSB, AU)", "font": {"size": 13}})
     return fig
 
 

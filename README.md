@@ -1,45 +1,29 @@
-# cwsky
+# cwsky: CW Signal Simulator
 
 Interactive simulator for continuous gravitational wave (CW) signals from
-spinning neutron stars.
+non-axisymmetric spinning neutron stars. Set the frequency, spindown, sky
+position and detector, and watch the Doppler-modulated signal appear in a
+frequency-time spectrogram. Zoom from the annual pattern down to the daily
+wiggle, and follow Earth and the incoming wave direction in a linked 3D view.
 
-## Static web app (GitHub Pages)
+**Play online:** https://damondmc.github.io/cwsky/
 
-`docs/` is a self-contained JavaScript version of the simulator. All physics runs
-in the browser, so sliders update live. Preview it locally with
+## Run locally
+
+The web app in `docs/` is self-contained JavaScript. All physics runs in the
+browser, so sliders update live. Serve the folder and open http://127.0.0.1:8001:
 
 ```
 python3 -m http.server 8001 --directory docs
 ```
 
-and open http://127.0.0.1:8001. To publish, enable GitHub Pages for this repo
-with source "Deploy from a branch", branch `main`, folder `/docs`. The site then
-appears at https://damondmc.github.io/cwsky/.
-
-`docs/data/` holds the inputs the page needs: a daily Earth ephemeris table,
-detector geometry exported from LAL, and coastlines. Regenerate the first two
-with
-
-```
-uv run python -m cwsky.export_data
-```
-
-## Python Dash app
-
-The original server-side version, same physics, useful as the reference:
-
-```
-uv sync
-uv run app.py
-```
-
-Open http://127.0.0.1:8050.
+Controls:
 
 - Left panel: CW parameters (sliders and boxes are linked).
-- Spectrogram: drag to zoom, scroll to zoom, double-click to reset. The
-  emulated signal is re-rendered at the resolution of the zoomed window, so
-  zooming in shows the daily Doppler wiggle and zooming out shows the annual
-  pattern and the spindown slope.
+- Spectrogram: drag to zoom, scroll to zoom, double-click to reset. The signal
+  is re-rendered at the resolution of the zoomed window, so zooming in shows the
+  daily Doppler wiggle and zooming out shows the annual pattern and the spindown
+  slope.
 - Time slider: moves the dashed marker and drives the two 3D views.
 - Earth view: drag to rotate, scroll to zoom. Red arrow is the incoming CW
   propagation direction, orange points to the Sun. The globe spins with
@@ -47,12 +31,33 @@ Open http://127.0.0.1:8050.
 
 ## Physics
 
-`cwsky/emulator.py` computes everything analytically, no SFTs are generated:
+The observed frequency is
 
-- Doppler: f(t) = [F0 + F1 dt + F2 dt^2 / 2] (1 + v.n / c), with v the
-  detector's barycentric velocity (Earth orbit from the JPL DE432s ephemeris
-  via astropy, plus the site's GCRS rotation velocity).
-- Antenna pattern F+, Fx from lal.ComputeDetAMResponse at the Greenwich mean
-  sidereal time, giving the daily amplitude modulation.
-- Power per SFT bin relative to the noise: A^2 Tsft / (2 sqrtSX^2), spread
-  with a sinc^2 of width 1/Tsft around the track, plus exponential noise.
+    f(t) = [f0 + f1 dt + f2 dt^2 / 2] (1 + v.n / c)
+
+with v the detector's barycentric velocity (Earth's orbit from the JPL DE432s
+ephemeris plus the site's rotation about Earth's axis) and n the unit vector to
+the source. The antenna pattern F+, Fx follows the same algorithm as
+`lal.ComputeDetAMResponse` at the Greenwich mean sidereal time, giving the
+daily amplitude modulation. Power per SFT bin relative to the noise is
+A^2 Tsft / (2 Sn), spread with a sinc^2 of width 1/Tsft around the track, plus
+exponential noise. No SFTs are generated.
+
+## Python reference implementation
+
+`cwsky/emulator.py` is the same model in Python on top of astropy and LAL, and
+`app.py` is a Plotly Dash version of the interface. Both are kept as the
+reference the JavaScript port is checked against.
+
+```
+uv sync
+uv run app.py
+```
+
+`docs/data/` holds the inputs the web app needs: a daily Earth ephemeris table
+and detector geometry exported from LAL, plus coastlines. Regenerate the first
+two with
+
+```
+uv run python -m cwsky.export_data
+```
