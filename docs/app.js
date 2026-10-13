@@ -292,8 +292,13 @@ function renderEarth(tgps) {
   traces.push({ type: "scatter3d", mode: "lines", x: [0, 1.4 * n[0]], y: [0, 1.4 * n[1]], z: [0, 1.4 * n[2]],
     line: { color: "#ff4444", width: 2, dash: "dot" }, showlegend: false, hoverinfo: "skip" });
 
-  Plotly.react("earth", traces, sceneLayout("earth", 1.5, `Earth view (GCRS axes)   GPS ${tgps.toFixed(0)}   ${gpsToUtcString(tgps)}`),
-    { displaylogo: false, responsive: true });
+  const layout = sceneLayout("earth", 1.5, `Earth view (GCRS axes)   GPS ${tgps.toFixed(0)}   ${gpsToUtcString(tgps)}`);
+  // Start looking at the selected detector as it is at the observation start, so the
+  // continent under it faces the viewer; the user's own rotation is kept by uirevision.
+  const [r0] = sitePosVel(p.tstart, DETS[p.detector]);
+  const eye = scale(r0, 1.7 / norm(r0));
+  layout.scene.camera = { eye: { x: eye[0], y: eye[1], z: eye[2] } };
+  Plotly.react("earth", traces, layout, { displaylogo: false, responsive: true });
 }
 
 let ringCache = { key: null, ring: null };
@@ -326,7 +331,11 @@ function renderOrbit(tgps) {
   layout.scene.zaxis = { visible: false, range: [-1.2, 1.2] };
   layout.scene.aspectmode = "manual";
   layout.scene.aspectratio = { x: 1, y: 1, z: 0.75 };   // 2.4 / 3.2 keeps the scale isotropic
-  layout.scene.camera = { eye: { x: 1.0, y: 1.0, z: 0.6 } };
+  // Look from a direction perpendicular to the source so the CW arrow is seen side-on
+  // and never hides the Earth.
+  const side = [n[1], -n[0], 0];
+  const sn = norm(side) || 1;
+  layout.scene.camera = { eye: { x: 1.3 * side[0] / sn, y: 1.3 * side[1] / sn, z: 0.6 } };
   Plotly.react("orbit", traces, layout, { displaylogo: false, responsive: true });
 }
 

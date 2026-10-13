@@ -378,7 +378,12 @@ def earth_figure(p, t_gps):
 
     fig = go.Figure(traces)
     date = Time(t_gps, format="gps").utc.iso[:19]
-    fig.update_layout(**_scene("earth", 1.5),
+    layout = _scene("earth", 1.5)
+    # Start looking at the selected detector as it is at the observation start
+    r0, _ = em.site_posvel(np.array([p["tstart"]]), em.detector(p["detector"]))
+    eye = 1.7 * r0[0] / np.linalg.norm(r0[0])
+    layout["scene"]["camera"] = {"eye": {"x": float(eye[0]), "y": float(eye[1]), "z": float(eye[2])}}
+    fig.update_layout(**layout,
                       title={"text": f"Earth view (GCRS axes)   GPS {t_gps:.0f}   {date} UTC",
                              "font": {"size": 13}})
     return fig
@@ -401,10 +406,12 @@ def orbit_figure(p, t_gps, ring):
     ]
     traces += _arrow(1.6 * n, 1.15 * n, "#ff4444", "CW propagation (from source)")
     fig = go.Figure(traces)
+    side = np.array([n[1], -n[0], 0.0])
+    side /= np.linalg.norm(side) or 1.0
     layout = _scene("orbit", 1.6)
     layout["scene"].update(zaxis={"visible": False, "range": [-1.2, 1.2]}, aspectmode="manual",
                            aspectratio={"x": 1, "y": 1, "z": 0.75},
-                           camera={"eye": {"x": 1.0, "y": 1.0, "z": 0.6}})
+                           camera={"eye": {"x": 1.3 * side[0], "y": 1.3 * side[1], "z": 0.6}})
     fig.update_layout(**layout, title={"text": "Orbit view (SSB, AU)", "font": {"size": 13}})
     return fig
 
