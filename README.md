@@ -6,18 +6,13 @@ position and detector, and watch the Doppler-modulated signal appear in a
 frequency-time spectrogram. Zoom from the annual pattern down to the daily
 wiggle, and follow Earth and the incoming wave direction in a linked 3D view.
 
-**Play online:** https://damondmc.github.io/cwsky/
-
-## Run locally
+**Play online:** https://damondmc.github.io/cwsky/ (also embedded on my
+website, https://damondmc.github.io)
 
 The web app in `docs/` is self-contained JavaScript. All physics runs in the
-browser, so sliders update live. Serve the folder and open http://127.0.0.1:8001:
+browser, so sliders update live.
 
-```
-python3 -m http.server 8001 --directory docs
-```
-
-Controls:
+## Controls
 
 - Left panel: CW parameters (sliders and boxes are linked).
 - Spectrogram: drag to zoom, scroll to zoom, double-click to reset. The signal
