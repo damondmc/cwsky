@@ -396,8 +396,8 @@ def orbit_figure(p, t_gps, ring):
                      line={"color": "#99a", "width": 2}, name="Orbit (1 yr)", hoverinfo="skip"),
         go.Scatter3d(x=path[:, 0], y=path[:, 1], z=path[:, 2], mode="lines",
                      line={"color": "#1aa34a", "width": 4}, name="Observed so far", hoverinfo="skip"),
-        _solid_sphere([0, 0, 0], 0.24, "#ff9900", "Sun"),
-        _solid_sphere(pos_e, 0.06, "#2d7dd2", "Earth"),
+        _solid_sphere([0, 0, 0], 0.30, "#ff9900", "Sun"),
+        _solid_sphere(pos_e, 0.09, "#2d7dd2", "Earth"),
     ]
     traces += _arrow(1.6 * n, 1.15 * n, "#ff4444", "CW propagation (from source)")
     fig = go.Figure(traces)
