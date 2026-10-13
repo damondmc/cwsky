@@ -3,7 +3,30 @@
 Interactive emulator for continuous gravitational wave (CW) signals from
 spinning neutron stars.
 
-## Run
+## Static web app (GitHub Pages)
+
+`docs/` is a self-contained JavaScript version of the emulator. All physics runs
+in the browser, so sliders update live. Preview it locally with
+
+```
+python3 -m http.server 8001 --directory docs
+```
+
+and open http://127.0.0.1:8001. To publish, enable GitHub Pages for this repo
+with source "Deploy from a branch", branch `main`, folder `/docs`. The site then
+appears at https://damondmc.github.io/cwsky/.
+
+`docs/data/` holds the inputs the page needs: a daily Earth ephemeris table,
+detector geometry exported from LAL, and coastlines. Regenerate the first two
+with
+
+```
+uv run python -m cwsky.export_data
+```
+
+## Python Dash app
+
+The original server-side version, same physics, useful as the reference:
 
 ```
 uv sync

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CW Sky Emulator</title>
+<link rel="stylesheet" href="style.css">
+<script>
+  window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]] }, svg: { fontCache: "global" } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+<script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <h3>CW parameters</h3>
+
+    <div class="ctl" data-id="F0"><div class="lbl">\(f_0\) (Hz)</div>
+      <div class="row"><input type="range" min="20" max="1500" step="0.1" value="100"><input type="number" value="100"></div></div>
+    <div class="ctl" data-id="F1"><div class="lbl">\(\dot f\) (Hz/s)</div>
+      <div class="row"><input type="range" min="-1e-8" max="0" step="1e-11" value="-1e-10"><input type="number" value="-1e-10"></div></div>
+    <div class="ctl" data-id="F2"><div class="lbl">\(\ddot f\) (Hz/s\(^2\))</div>
+      <div class="row"><input type="range" min="-1e-17" max="1e-17" step="1e-19" value="0"><input type="number" value="0"></div></div>
+    <div class="ctl" data-id="Alpha"><div class="lbl">\(\alpha\) right ascension (rad)</div>
+      <div class="row"><input type="range" min="0" max="6.2832" step="0.01" value="1.5"><input type="number" value="1.5"></div></div>
+    <div class="ctl" data-id="Delta"><div class="lbl">\(\delta\) declination (rad)</div>
+      <div class="row"><input type="range" min="-1.5708" max="1.5708" step="0.01" value="0.5"><input type="number" value="0.5"></div></div>
+    <div class="ctl" data-id="h0" data-log="1"><div class="lbl">\(h_0\) (log slider)</div>
+      <div class="row"><input type="range" min="-25" max="-22" step="0.05" value="-23"><input type="number" value="1e-23"></div></div>
+    <div class="ctl" data-id="sqrtSX" data-log="1"><div class="lbl">\(\sqrt{S_n}\) (Hz\(^{-1/2}\), log slider)</div>
+      <div class="row"><input type="range" min="-24" max="-22" step="0.05" value="-23"><input type="number" value="1e-23"></div></div>
+    <div class="ctl" data-id="cosi"><div class="lbl">\(\cos\iota\)</div>
+      <div class="row"><input type="range" min="-1" max="1" step="0.01" value="0"><input type="number" value="0"></div></div>
+    <div class="ctl" data-id="psi"><div class="lbl">\(\psi\) polarisation (rad)</div>
+      <div class="row"><input type="range" min="-0.7854" max="0.7854" step="0.01" value="0"><input type="number" value="0"></div></div>
+    <div class="ctl" data-id="Tsft"><div class="lbl">\(T_\mathrm{SFT}\) (s)</div>
+      <div class="row"><input type="range" min="300" max="86400" step="300" value="1800"><input type="number" value="1800"></div></div>
+    <div class="ctl" data-id="duration"><div class="lbl">\(T_\mathrm{obs}\) (days)</div>
+      <div class="row"><input type="range" min="1" max="730" step="1" value="365"><input type="number" value="365"></div></div>
+
+    <div class="lbl">Detector</div>
+    <select id="detector">
+      <option>H1</option><option>L1</option><option>V1</option><option>K1</option><option>G1</option>
+    </select>
+
+    <div class="lbl">Start time (GPS s)</div>
+    <input type="number" id="tstart" value="1400000000" style="width:100%">
+    <div id="tstart-date" class="muted"></div>
+
+    <label class="chk"><input type="checkbox" id="opt-spin" checked> Earth rotation (daily Doppler)</label>
+    <label class="chk"><input type="checkbox" id="opt-track" checked> Show track line</label>
+    <label class="chk"><input type="checkbox" id="opt-noise" checked> Noise</label>
+
+    <div class="muted help">
+      Drag on the spectrogram to zoom, double-click to reset. Drag the Earth view to rotate, scroll to zoom.
+      <p>\(f(t) = \left[f_0 + \dot f\,\Delta t + \tfrac12 \ddot f\,\Delta t^2\right]\left(1 + \frac{\vec v_\mathrm{det}\cdot\hat n}{c}\right)\)</p>
+    </div>
+  </aside>
+
+  <main id="main">
+    <div id="spec"></div>
+    <div id="trow">
+      <span>Time (days from start)</span>
+      <input type="range" id="tslider" min="0" max="365" step="0.01" value="0">
+      <input type="number" id="tbox" value="0" step="0.01">
+    </div>
+    <div id="views">
+      <div id="earth"></div>
+      <div id="orbit"></div>
+    </div>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
