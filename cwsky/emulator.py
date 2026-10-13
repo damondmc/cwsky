@@ -28,7 +28,6 @@ DETECTOR_INDEX = {
     "L1": lal.LALDetectorIndexLLODIFF,
     "V1": lal.LALDetectorIndexVIRGODIFF,
     "K1": lal.LALDetectorIndexKAGRADIFF,
-    "G1": lal.LALDetectorIndexGEO600DIFF,
 }
 
 

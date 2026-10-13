@@ -1,7 +1,7 @@
 [project]
 name = "cwsky"
 version = "0.1.0"
-description = "Interactive emulator for continuous gravitational wave signals"
+description = "Interactive simulator for continuous gravitational wave signals"
 requires-python = ">=3.11"
 dependencies = [
     "lalsuite>=7.26",

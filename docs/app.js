@@ -149,8 +149,8 @@ function emulate(p, tRange, fRange) {
 // ---------------------------------------------------------------------------
 
 const p = {
-  F0: 100, F1: -1e-10, F2: 0, Alpha: 1.5, Delta: 0.5, h0: 1e-23, sqrtSX: 1e-23, cosi: 0, psi: 0,
-  Tsft: 1800, duration: 365 * 86400, tstart: 1400000000, tref: 1400000000,
+  F0: 100, F1: -1e-9, F2: 0, Alpha: 1.5, Delta: 0.5, h0: 1e-23, sqrtSX: 1e-23, cosi: 0, psi: 0,
+  Tsft: 1800, duration: 500 * 86400, tstart: 1400000000, tref: 1400000000,
   detector: "H1", spin: true, track: true, noise: true,
 };
 let view = null;     // {t: [d0, d1] days, f: [f0, f1] Hz}

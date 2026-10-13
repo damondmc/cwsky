@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CW Sky Emulator</title>
+<title>CW Signal Simulator</title>
 <link rel="stylesheet" href="style.css">
 <script>
   window.MathJax = { tex: { inlineMath: [["\\(", "\\)"]] }, svg: { fontCache: "global" } };
@@ -19,7 +19,7 @@
     <div class="ctl" data-id="F0"><div class="lbl">\(f_0\) (Hz)</div>
       <div class="row"><input type="range" min="20" max="1500" step="0.1" value="100"><input type="number" value="100"></div></div>
     <div class="ctl" data-id="F1"><div class="lbl">\(\dot f\) (Hz/s)</div>
-      <div class="row"><input type="range" min="-1e-8" max="0" step="1e-11" value="-1e-10"><input type="number" value="-1e-10"></div></div>
+      <div class="row"><input type="range" min="-1e-8" max="0" step="1e-11" value="-1e-9"><input type="number" value="-1e-9"></div></div>
     <div class="ctl" data-id="F2"><div class="lbl">\(\ddot f\) (Hz/s\(^2\))</div>
       <div class="row"><input type="range" min="-1e-17" max="1e-17" step="1e-19" value="0"><input type="number" value="0"></div></div>
     <div class="ctl" data-id="Alpha"><div class="lbl">\(\alpha\) right ascension (rad)</div>
@@ -37,11 +37,11 @@
     <div class="ctl" data-id="Tsft"><div class="lbl">\(T_\mathrm{SFT}\) (s)</div>
       <div class="row"><input type="range" min="300" max="86400" step="300" value="1800"><input type="number" value="1800"></div></div>
     <div class="ctl" data-id="duration"><div class="lbl">\(T_\mathrm{obs}\) (days)</div>
-      <div class="row"><input type="range" min="1" max="730" step="1" value="365"><input type="number" value="365"></div></div>
+      <div class="row"><input type="range" min="1" max="730" step="1" value="500"><input type="number" value="500"></div></div>
 
     <div class="lbl">Detector</div>
     <select id="detector">
-      <option>H1</option><option>L1</option><option>V1</option><option>K1</option><option>G1</option>
+      <option>H1</option><option>L1</option><option>V1</option><option>K1</option>
     </select>
 
     <div class="lbl">Start time (GPS s)</div>
@@ -62,7 +62,7 @@
     <div id="spec"></div>
     <div id="trow">
       <span>Time (days from start)</span>
-      <input type="range" id="tslider" min="0" max="365" step="0.01" value="0">
+      <input type="range" id="tslider" min="0" max="500" step="0.01" value="0">
       <input type="number" id="tbox" value="0" step="0.01">
     </div>
     <div id="views">

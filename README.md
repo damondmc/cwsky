@@ -1,11 +1,11 @@
 # cwsky
 
-Interactive emulator for continuous gravitational wave (CW) signals from
+Interactive simulator for continuous gravitational wave (CW) signals from
 spinning neutron stars.
 
 ## Static web app (GitHub Pages)
 
-`docs/` is a self-contained JavaScript version of the emulator. All physics runs
+`docs/` is a self-contained JavaScript version of the simulator. All physics runs
 in the browser, so sliders update live. Preview it locally with
 
 ```

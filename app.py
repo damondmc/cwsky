@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive CW signal emulator: parameter panel, zoomable f-t spectrogram, 3D Earth view."""
+"""Interactive CW signal simulator: parameter panel, zoomable f-t spectrogram, 3D Earth view."""
 
 import json
 import os
@@ -25,7 +25,7 @@ with open(os.path.join(os.path.dirname(__file__), "cwsky", "data", "coastlines_1
 # name, label (markdown with $latex$), slider(min, max, step), default, log10 slider?
 PARAMS = [
     ("F0", r"$f_0$ (Hz)", (20.0, 1500.0, 0.1), 100.0, False),
-    ("F1", r"$\dot f$ (Hz/s)", (-1e-8, 0.0, 1e-11), -1e-10, False),
+    ("F1", r"$\dot f$ (Hz/s)", (-1e-8, 0.0, 1e-11), -1e-9, False),
     ("F2", r"$\ddot f$ (Hz/s$^2$)", (-1e-17, 1e-17, 1e-19), 0.0, False),
     ("Alpha", r"$\alpha$ right ascension (rad)", (0.0, 2 * PI, 0.01), 1.5, False),
     ("Delta", r"$\delta$ declination (rad)", (-PI / 2, PI / 2, 0.01), 0.5, False),
@@ -34,7 +34,7 @@ PARAMS = [
     ("cosi", r"$\cos\iota$", (-1.0, 1.0, 0.01), 0.0, False),
     ("psi", r"$\psi$ polarisation (rad)", (-PI / 4, PI / 4, 0.01), 0.0, False),
     ("Tsft", r"$T_\mathrm{SFT}$ (s)", (300, 86400, 300), 1800, False),
-    ("duration", r"$T_\mathrm{obs}$ (days)", (1, 730, 1), 365, False),
+    ("duration", r"$T_\mathrm{obs}$ (days)", (1, 730, 1), 500, False),
 ]
 DEFAULT_TSTART = 1_400_000_000
 
@@ -61,7 +61,7 @@ def control(name, text, rng, default, log):
 
 
 app = Dash(__name__)
-app.title = "CW Sky Emulator"
+app.title = "CW Signal Simulator"
 
 app.layout = html.Div([
     dcc.Store(id="view"),
