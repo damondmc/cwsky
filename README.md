@@ -33,7 +33,7 @@ Controls:
 
 The observed frequency is
 
-    f(t) = [f0 + f1 dt + f2 dt^2 / 2] (1 + v.n / c)
+    f(t) = [f0 + f1 dt + f2 dt^2 / 2] (1 + (v/c).n)
 
 with v the detector's barycentric velocity (Earth's orbit from the JPL DE432s
 ephemeris plus the site's rotation about Earth's axis) and n the unit vector to

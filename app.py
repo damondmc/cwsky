@@ -92,7 +92,7 @@ Drag on the spectrogram to zoom, double-click to reset. Drag the Earth view to r
 scroll to zoom.
 
 $f(t) = \left[f_0 + \dot f\,\Delta t + \tfrac12 \ddot f\,\Delta t^2\right]
-\left(1 + \frac{\vec v\cdot\hat n}{c}\right)$
+\left(1 + \frac{\vec v}{c}\cdot\hat n\right)$
 """,
             mathjax=True, style={"fontSize": 11, "color": MUTED, "marginTop": 12},
         ),
