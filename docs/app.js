@@ -317,7 +317,7 @@ function renderOrbit(tgps) {
       line: { color: "#99a", width: 2 }, name: "Orbit (1 yr)", hoverinfo: "skip" },
     { type: "scatter3d", mode: "lines", x: path.map(q => q[0]), y: path.map(q => q[1]), z: path.map(q => q[2]),
       line: { color: "#1aa34a", width: 4 }, name: "Observed so far", hoverinfo: "skip" },
-    sphereTrace([0, 0, 0], 0.18, "#ff9900", "Sun"),
+    sphereTrace([0, 0, 0], 0.24, "#ff9900", "Sun"),
     sphereTrace(posE, 0.06, "#2d7dd2", "Earth"),
     ...arrow(scale(n, 1.6), scale(n, 1.15), "#ff4444", "CW propagation (from source)"),
   ];
